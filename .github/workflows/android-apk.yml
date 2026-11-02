@@ -1,0 +1,48 @@
+name: Build DESHAN MODXZZ APK
+
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - "DESHAN_MODXZZ_Source.zip"
+      - ".github/workflows/android-apk.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Set up Gradle 8.9
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "8.9"
+
+      - name: Extract Android project
+        run: |
+          unzip -q DESHAN_MODXZZ_Source.zip -d project
+          test -f project/DESHAN_MODXZZ/app/build.gradle
+
+      - name: Build debug APK
+        run: gradle -p project/DESHAN_MODXZZ assembleDebug --no-daemon
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: DESHAN-MODXZZ-debug-apk
+          path: project/DESHAN_MODXZZ/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+          retention-days: 14
+          
