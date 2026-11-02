@@ -1,11 +1,13 @@
-name: Build DESHAN MODXZZ APK
+name: Build GOTUKOLA KEYBOARD APK
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - main
     paths:
-      - "DESHAN_MODXZZ_Source.zip"
+      - "GOTUKOLA_KEYBOARD_V1_DEV_SOURCE.zip"
       - ".github/workflows/android-apk.yml"
+
   workflow_dispatch:
 
 permissions:
@@ -32,17 +34,17 @@ jobs:
 
       - name: Extract Android project
         run: |
-          unzip -q DESHAN_MODXZZ_Source.zip -d project
-          test -f project/DESHAN_MODXZZ/app/build.gradle
+          unzip -q GOTUKOLA_KEYBOARD_V1_DEV_SOURCE.zip -d project
+          test -f project/GOTUKOLA_KEYBOARD/DESHAN_MODXZZ/app/build.gradle
 
-      - name: Build debug APK
-        run: gradle -p project/DESHAN_MODXZZ assembleDebug --no-daemon
+      - name: Build Debug APK
+        run: |
+          gradle -p project/GOTUKOLA_KEYBOARD/DESHAN_MODXZZ assembleDebug --no-daemon
 
-      - name: Upload APK artifact
+      - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: DESHAN-MODXZZ-debug-apk
-          path: project/DESHAN_MODXZZ/app/build/outputs/apk/debug/app-debug.apk
+          name: GOTUKOLA-KEYBOARD-debug-apk
+          path: project/GOTUKOLA_KEYBOARD/DESHAN_MODXZZ/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
           retention-days: 14
-          
